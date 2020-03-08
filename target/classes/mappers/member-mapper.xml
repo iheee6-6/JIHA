@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+	<resultMap id="memberResultSet" type="Member">
+		<id property="id" column="m_id" />
+		<result property="pwd" column="password" />
+		<result property="name" column="name" />
+		<result property="email" column="EMAIL" />
+		<result property="phone" column="PHONE" />
+		<result property="address" column="ADDRESS" />
+		<result property="mStatus" column="M_STATUS" />
+		<result property="enrollDate" column="ENROLL_DATE" />
+		<result property="storeName" column="s_name" />
+		<result property="b_no" column="b_no" />
+	</resultMap>
+	<insert id="insertMember">
+		insert into member values(mseq.nextval,#{id},#{address},#{phone},#{pwd},
+		#{email},#{b_no},#{storeName},#{qrcode},#{name},default,default)
+	</insert>
+
+	<select id="dupId" parameterType="string" resultType="_int">
+		SELECT
+		COUNT(*)
+		FROM MEMBER
+		WHERE M_ID=#{id}
+	</select>
+</mapper>
