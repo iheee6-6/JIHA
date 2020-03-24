@@ -16,8 +16,8 @@
 		<result property="b_no" column="b_no" />
 	</resultMap>
 	<insert id="insertMember">
-		insert into member values(mseq.nextval,#{id},#{address},#{phone},#{pwd},
-		#{email},#{b_no},#{storeName},#{qrcode},#{name},default,default)
+		insert into member values(#{id},#{address},#{phone},#{pwd},
+		#{email},#{b_no},#{storeName},#{qrcode},#{name},default)
 	</insert>
 
 	<select id="dupId" parameterType="string" resultType="_int">
@@ -25,5 +25,12 @@
 		COUNT(*)
 		FROM MEMBER
 		WHERE M_ID=#{id}
+	</select>
+	
+	<select id="selectMember" parameterType="Member" resultMap="memberResultSet">
+		SELECT *
+		FROM MEMBER
+		WHERE M_ID=#{id}
+		AND M_STATUS='Y'
 	</select>
 </mapper>

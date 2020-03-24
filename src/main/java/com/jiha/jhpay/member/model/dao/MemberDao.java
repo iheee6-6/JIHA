@@ -20,4 +20,8 @@ public class MemberDao {
 		return sqlSession.selectOne("memberMapper.dupId",id);
 	}
 
+	public Member selectMember(Member mem) {
+		return sqlSession.selectOne("memberMapper.selectMember",mem);
+	}
+
 }

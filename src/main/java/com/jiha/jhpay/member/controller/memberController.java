@@ -10,14 +10,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -28,13 +33,50 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.jiha.jhpay.member.model.vo.Member;
+import com.jiha.jhpay.member.exception.MemberException;
 import com.jiha.jhpay.member.model.service.MemberService;
+
+@SessionAttributes({"loginUser","msg"})
 
 @Controller
 public class memberController {
 	@Autowired
 	private MemberService mService;
 	
+	private Logger logger = LoggerFactory.getLogger(memberController.class);
+	
+	@RequestMapping("login.do")
+	public String login(Member mem,Model model,HttpServletResponse response) {
+		Member loginMember = mService.loginMember(mem); //아이디로 비번 뽑고 암호화비번과 비교 후 가져옴
+
+		
+		if(loginMember !=null) {
+			if(logger.isDebugEnabled())
+				logger.info(loginMember.getId() + " 로그인");
+			
+//			Cookie cookie = new Cookie("user_check", loginMember.getId());
+//			if (remember.equals("true")) {
+//				response.addCookie(cookie);
+//				System.out.println("쿠키 아이디저장 O");
+//				// 쿠키 확인
+//				// System.out.println("Service check" + cookie);
+//			} else {
+//				System.out.println("쿠키 아이디저장 X");
+//				cookie.setMaxAge(0);
+//				response.addCookie(cookie);
+//			}
+//
+//			System.out.println("3단계-로그인단계");
+//			// 세션 저장하기 전에 비밀번호 가리기
+//			loginMember.setPwd("");
+
+			model.addAttribute("loginUser", loginMember);
+			return "store/storePage";
+		}else {
+			throw new MemberException("로그인 실패!!");	
+		}
+		
+	}
 	@RequestMapping("signup.do")
 	public String signup() {
 		return "common/signup";
