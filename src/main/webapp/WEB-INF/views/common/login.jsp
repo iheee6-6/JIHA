@@ -55,6 +55,9 @@
 </style>
 <!-- Custom styles for this template -->
 <link href="resources/css/common/signin.css" rel="stylesheet">
+
+<!-- js -->
+<script src="${contextPath}/resources/js/cookie.js"></script>
 </head>
 <body class="text-center">
 	<c:if test="${ !empty msg }">
@@ -63,24 +66,24 @@
 		</script>
 		<c:remove var="msg" />
 	</c:if>
-	<form method="post" class="form-signin">
+	<form method="post" class="form-signin" action="login.do">
 		<img class="mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg"
 			alt="" width="72" height="72">
 		<h1 class="h3 mb-3 font-weight-normal">환영합니다</h1>
-		<label for="inputEmail" class="sr-only">Email address</label> <input
-			type="email" id="inputEmail" class="form-control"
-			placeholder="Email address" required autofocus> <label
+		<label for="inputEmail" class="sr-only">ID</label> <input
+			type="text" id="userId" class="form-control"
+			placeholder="ID" name="id" required autofocus> <label
 			for="inputPassword" class="sr-only">Password</label> <input
 			type="password" id="inputPassword" class="form-control"
-			placeholder="Password" required>
+			placeholder="Password" name="pwd" required>
 		<div class="checkbox mb-3">
-			<label> <input type="checkbox" value="remember-me">
+			<label> <input name="remember" id="remember" type="checkbox" value="remember-me">
 				Remember me
 			</label>
 		</div>
 		<button class="btn btn-lg btn-primary btn-block" type="submit">로그인</button>
 		<br> <a href="signup.do"> 회원가입</a>
-		<p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p>
+		<p class="mt-5 mb-3 text-muted">&copy; JHPAY - 2020</p>
 	</form>
 </body>
 </html>

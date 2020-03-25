@@ -29,4 +29,14 @@ public class MemberServiceImpl implements MemberService {
 		return mDao.checkIdDup(id);
 	}
 
+	@Override
+	public Member loginMember(Member mem) {
+		Member loginUser = mDao.selectMember(mem);
+		
+		if(loginUser != null && !bcryptPasswordEncoder.matches(mem.getPwd(), loginUser.getPwd())) {
+			loginUser = null;
+		}
+		return loginUser;
+	}
+
 }

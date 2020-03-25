@@ -9,4 +9,7 @@ public interface MemberService {
 
 	int checkIdDup(String id);
 
+	Member loginMember(Member mem);
+
+
 }

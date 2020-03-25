@@ -10,10 +10,12 @@
 
 	<typeAliases>
 		<typeAlias type="com.jiha.jhpay.member.model.vo.Member" alias="Member"/>
+		<typeAlias type="com.jiha.jhpay.store.model.vo.Menu" alias="Menu"/>
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="mappers/member-mapper.xml"/>
+		<mapper resource="mappers/store-mapper.xml"/>
 	</mappers>
 
 </configuration>
