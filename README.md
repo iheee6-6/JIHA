@@ -1,4 +1,4 @@
-#JIHA PAY
+# JIHA PAY
 
 QR Code를 통한 테이블 주문 서비스 사이트
 
