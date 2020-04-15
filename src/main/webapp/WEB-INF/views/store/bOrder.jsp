@@ -1,176 +1,122 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>JHPAY - MyPage</title>
-  </head>
-  <body>
-  <script>
-  $(function() {
-		$("#orders").addClass("active");
-	});
-  </script>
-  
-<jsp:include page="topBar.jsp"/>
+<html ng-app>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>JHPAY - MyPage</title>
+<script src="http://code.angularjs.org/angular-1.0.0rc10.min.js"></script>
+<!-- ng-model= -->
+</head>
+<body>
+	<script>
+		$(function() {
+			$("#orders").addClass("active");
+		});
+	</script>
 
-<div class="container-fluid">
-  <div class="row">
-    <jsp:include page="leftMenu.jsp"/>
+	<jsp:include page="topBar.jsp" />
 
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Dashboard</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            This week
-          </button>
-        </div>
-      </div>
+	<div class="container-fluid">
+		<div class="row">
+			<jsp:include page="leftMenu.jsp" />
 
-      <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+			<div ng-app="myApp" ng-controller="orderCont"
+				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+				<h1 class="h2">현재 주문 현황</h1>
 
-      <h2>Section title</h2>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Header</th>
-              <th>Header</th>
-              <th>Header</th>
-              <th>Header</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>Lorem</td>
-              <td>ipsum</td>
-              <td>dolor</td>
-              <td>sit</td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>amet</td>
-              <td>consectetur</td>
-              <td>adipiscing</td>
-              <td>elit</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>Integer</td>
-              <td>nec</td>
-              <td>odio</td>
-              <td>Praesent</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>libero</td>
-              <td>Sed</td>
-              <td>cursus</td>
-              <td>ante</td>
-            </tr>
-            <tr>
-              <td>1,004</td>
-              <td>dapibus</td>
-              <td>diam</td>
-              <td>Sed</td>
-              <td>nisi</td>
-            </tr>
-            <tr>
-              <td>1,005</td>
-              <td>Nulla</td>
-              <td>quis</td>
-              <td>sem</td>
-              <td>at</td>
-            </tr>
-            <tr>
-              <td>1,006</td>
-              <td>nibh</td>
-              <td>elementum</td>
-              <td>imperdiet</td>
-              <td>Duis</td>
-            </tr>
-            <tr>
-              <td>1,007</td>
-              <td>sagittis</td>
-              <td>ipsum</td>
-              <td>Praesent</td>
-              <td>mauris</td>
-            </tr>
-            <tr>
-              <td>1,008</td>
-              <td>Fusce</td>
-              <td>nec</td>
-              <td>tellus</td>
-              <td>sed</td>
-            </tr>
-            <tr>
-              <td>1,009</td>
-              <td>augue</td>
-              <td>semper</td>
-              <td>porta</td>
-              <td>Mauris</td>
-            </tr>
-            <tr>
-              <td>1,010</td>
-              <td>massa</td>
-              <td>Vestibulum</td>
-              <td>lacinia</td>
-              <td>arcu</td>
-            </tr>
-            <tr>
-              <td>1,011</td>
-              <td>eget</td>
-              <td>nulla</td>
-              <td>Class</td>
-              <td>aptent</td>
-            </tr>
-            <tr>
-              <td>1,012</td>
-              <td>taciti</td>
-              <td>sociosqu</td>
-              <td>ad</td>
-              <td>litora</td>
-            </tr>
-            <tr>
-              <td>1,013</td>
-              <td>torquent</td>
-              <td>per</td>
-              <td>conubia</td>
-              <td>nostra</td>
-            </tr>
-            <tr>
-              <td>1,014</td>
-              <td>per</td>
-              <td>inceptos</td>
-              <td>himenaeos</td>
-              <td>Curabitur</td>
-            </tr>
-            <tr>
-              <td>1,015</td>
-              <td>sodales</td>
-              <td>ligula</td>
-              <td>in</td>
-              <td>libero</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </main>
-  </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-      <script>window.jQuery || document.write('<script src="/docs/4.4/assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="/docs/4.4/dist/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-        <script src="resources/js/dashboard.js"></script></body>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-sm">
+
+					<thead>
+						<tr>
+							<td></td>
+							<th>No</th>
+							<th>메뉴명</th>
+							<th>가격</th>
+							<th>특이사항</th>
+							<th>개수</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input class="menuCh" name="menuCh" type="checkbox"
+								value=""></td>
+							<td>1</td>
+							<td>떡볶이</td>
+							<td>5000</td>
+							<td>매운맛 3단계</td>
+							<td>50</td>
+						</tr>
+						<tr>
+							<td><input class="menuCh" name="menuCh" type="checkbox"
+								value=""></td>
+							<td>2</td>
+							<td>튀김</td>
+							<td>700</td>
+							<td>오징어, 김말이, 고구마</td>
+							<td>70</td>
+						</tr>
+						
+						<tr ng-repeat="x in menu">
+							<td>{{x.orderNo}}</td>
+							<td>{{x.name}}</td>
+							<td>{{x.price}}</td>
+							<td>{{x.elsePoint}}</td>
+							<td>{{x.amount}}</td>
+						</tr>
+					<%-- 	<c:forEach var="o" items="${orderList}" varStatus="status">
+							<tr>
+								<td><input class="menuCh" name="menuCh" type="checkbox"
+									value="${u.orderNo}"></td>
+								<td>${o.orderNo}</td>
+								<td>${o.name }</td>
+								<td>${o.price }</td>
+								<td>${o.elsePoint }</td>
+								<td>${o.amount }</td>
+							</tr>
+						</c:forEach> --%>
+					</tbody>
+
+				</table>
+
+				<div>
+					<div style="float: right; margin-right: 50px;">
+						<button type="button" class="btn btn-sm btn-danger" id="deleteM">선택
+							완료</button>
+					</div>
+				</div>
+			</div>
+			</main>
+			<script>
+				var app = angular.module('myApp', []);
+				app.controller('orderCont', function($scope, $http) {
+					$http.get("bOrder.do").then(function(response) {
+						$scope.menu = response.data.records;
+					});
+				});
+			</script>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+	<script>
+		window.jQuery
+				|| document
+						.write('<script src="/docs/4.4/assets/js/vendor/jquery.slim.min.js"><\/script>')
+	</script>
+	<script src="/docs/4.4/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+	<script src="resources/js/dashboard.js"></script>
+</body>
 </html>

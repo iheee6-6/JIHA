@@ -11,11 +11,14 @@
 	<typeAliases>
 		<typeAlias type="com.jiha.jhpay.member.model.vo.Member" alias="Member"/>
 		<typeAlias type="com.jiha.jhpay.store.model.vo.Menu" alias="Menu"/>
+		<typeAlias type="com.jiha.jhpay.board.model.vo.Board" alias="Board"/>
+		<typeAlias type="com.jiha.jhpay.board.model.vo.Reply" alias="Reply"/>
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="mappers/member-mapper.xml"/>
 		<mapper resource="mappers/store-mapper.xml"/>
+		<mapper resource="mappers/board-mapper.xml"/>
 	</mappers>
 
 </configuration>

@@ -12,5 +12,9 @@ public interface StoreService {
 
 	int deleteMenu(String id, String string);
 
+	int qnaPwdCheck(String pwd, int no);
+
+	ArrayList<Menu> selectStoreMenuList(String store);
+
 
 }

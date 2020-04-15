@@ -29,7 +29,7 @@
 					class="btn btn-primary" data-toggle="modal"
 					data-target="#AddMenuModal">메뉴 추가</button>
 				<form action="menuDelete.do" method="post" id="checkForm">
-					<div class="table-responsive">
+					<div class="table-responsive" style="text-align:center">
 						<table class="table table-sm">
 
 							<thead>
@@ -43,24 +43,11 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td><input class="menuCh" name="menuCh" type="checkbox"
-										value=""></td>
-									<td>1</td>
-									<td>떡볶이</td>
-									<td>5000</td>
-									<td>매운맛 3단계</td>
-									<td>50</td>
-								</tr>
-								<tr>
-									<td><input class="menuCh" name="menuCh" type="checkbox"
-										value=""></td>
-									<td>2</td>
-									<td>튀김</td>
-									<td>700</td>
-									<td>오징어, 김말이, 고구마</td>
-									<td>70</td>
-								</tr>
+								<c:if test="${empty menuList}">
+									<tr>
+										<td colspan="6">등록된 메뉴가 없습니다.</td>
+									</tr>
+								</c:if>
 								<c:forEach var="u" items="${menuList}" varStatus="status">
 									<tr>
 										<td><input class="menuCh" name="menuCh" type="checkbox"

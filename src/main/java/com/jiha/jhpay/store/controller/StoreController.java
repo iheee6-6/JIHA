@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,20 @@ import com.jiha.jhpay.store.model.service.StoreService;
 import com.jiha.jhpay.store.model.vo.Menu;
 
 @Controller
-public class storeController {
+public class StoreController {
 
 	@Autowired
 	private StoreService sService;
-
+	
+	@RequestMapping("enterStore.do")
+	public ModelAndView enterStore(ModelAndView mv,String store) {
+		
+		ArrayList<Menu> mList=sService.selectStoreMenuList(store);
+		
+		mv.addObject("menuList", mList);
+		mv.setViewName("user/enterStore");
+		return mv;
+	}
 	@RequestMapping("dashb.do")
 	public ModelAndView dashboard(ModelAndView mv, HttpSession session) {
 
@@ -123,4 +133,6 @@ public class storeController {
 		}
 		return "redirect:bMenuList.do";
 	}
+	
+	
 }

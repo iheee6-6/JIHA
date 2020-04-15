@@ -8,8 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,10 +21,13 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -39,11 +45,14 @@ import com.jiha.jhpay.member.model.service.MemberService;
 @SessionAttributes({"loginUser","msg"})
 
 @Controller
-public class memberController {
+public class MemberController {
 	@Autowired
 	private MemberService mService;
 	
-	private Logger logger = LoggerFactory.getLogger(memberController.class);
+	@Autowired
+	private JavaMailSender mailSender;
+	
+	private Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
 	@RequestMapping("login.do")
 	public String login(Member mem,Model model,HttpServletResponse response) {
@@ -118,7 +127,7 @@ public class memberController {
         if(!file.exists()) {
             file.mkdirs();
         }
-        String url = "localhost:8800/jhpay/enterStore.do?store="+storeName;
+        String url = "http://192.168.35.153/jhpay/enterStore.do?store="+storeName;
         // 코드인식시 링크걸 URL주소
         String codeurl = new String(url.getBytes("UTF-8"), "ISO-8859-1");
         // 큐알코드 바코드 생상값
@@ -157,10 +166,49 @@ public class memberController {
 		return mv; // json객체로 넘어감
 	}
 	
-	@RequestMapping("enterStore.do")
-	public ModelAndView enterStore(String storeName,ModelAndView mv) {
-		mv.addObject("storeName", storeName);
-		mv.setViewName("store/storeMenu");
-		return mv;
+	
+	@RequestMapping(value = "email.do")
+	@ResponseBody
+	public String mailSending(HttpServletRequest request, String email) {
+		String setfrom = "jhPay";
+		String tomail = email; // 받는 사람 이메일
+		String title = "회원가입 이메일 인증 서비스(JHPAY)"; // 제목
+
+		StringBuffer temp = new StringBuffer();
+		Random rnd = new Random();
+		for (int i = 0; i < 10; i++) {
+			int rIndex = rnd.nextInt(3);
+			switch (rIndex) {
+			case 0:
+				// a-z
+				temp.append((char) ((int) (rnd.nextInt(26)) + 97));
+				break;
+			case 1:
+				// A-Z
+				temp.append((char) ((int) (rnd.nextInt(26)) + 65));
+				break;
+			case 2:
+				// 0-9
+				temp.append((rnd.nextInt(10)));
+				break;
+			}
+		}
+
+		String content =temp.toString(); // 내용
+		try {
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+
+			messageHelper.setFrom(new InternetAddress(setfrom, "tcatch")); // 보내는사람 생략하거나 하면 정상작동을 안함
+			messageHelper.setTo(tomail); // 받는사람 이메일
+			messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
+			messageHelper.setText(content); // 메일 내용
+			mailSender.send(message);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return content;
 	}
+
 }

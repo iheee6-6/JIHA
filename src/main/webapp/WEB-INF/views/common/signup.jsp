@@ -227,6 +227,38 @@ span.error {
 				});
 
 			});
+			
+			function emailCheck(){
+	        	alert("이메일이 전송되었습니다");
+					var email = $("#mEmail").val();
+					
+					$.ajax({
+						url : "email.do",
+						
+						data:{email:email},
+						type : "get",
+						
+						success : function(data){
+							key = data;
+						},
+						
+						error : function(){
+							console.log('Ajax 통신 실패...');
+							checkEmail = false;
+						}					
+					});
+					
+	        }
+	        
+	       function emailCheck1() {
+	    	   var code = $(".emailcheck5").val();
+				if(key == code) {
+					alert("인증되었습니다.")
+					okEmail = true;
+				}else {
+					alert("인증번호가 일치하지 않습니다.")
+				}
+	       }
 		});
 
 		function validate() {
