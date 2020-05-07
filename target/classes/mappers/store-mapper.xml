@@ -18,6 +18,10 @@
 		#{rename_file},#{amount},DEFAULT,#{elsePoint})
 	</insert>
 
+	<select id="selectStoreMenuList" resultMap="MenuResultSet">
+		select * from menu
+		where s_name=#{store} and menu_status='Y'
+	</select>
 	<select id="selectMenuList" resultMap="MenuResultSet">
 		select * from menu
 		where m_id=#{id} and menu_status='Y'
@@ -27,4 +31,9 @@
 		update menu set menu_status='N'
 		where menu_no= #{menuNo}  and m_id= #{id}
 	</update>
+	
+	<select id="qnaPwdCheck">
+		select b_no
+		where b_no=#{no} and password=#{pwd}
+	</select>
 </mapper>

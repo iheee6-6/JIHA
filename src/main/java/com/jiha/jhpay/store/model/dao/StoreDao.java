@@ -30,4 +30,10 @@ public class StoreDao {
 		return sqlSession.update("storeMapper.deleteMenu",map);
 	}
 
+	public ArrayList<Menu> selectStoreMenuList(String store) {
+		return (ArrayList)sqlSession.selectList("storeMapper.selectStoreMenuList",store);
+	}
+	
+	
+
 }
