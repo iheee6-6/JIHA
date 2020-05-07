@@ -63,9 +63,6 @@ div {
 							<td>0</td>
 						</tr>
 						<c:forEach var="q" items="${qnaList}" varStatus="status">
-							<%-- <c:url var="qDetail" value="qnaDetail.do">
-								<c:param name="no" value="${q.no }"/>
-							</c:url> --%>
 							<tr>
 								<td>${q.no}</td>
 								<td><c:choose>
@@ -80,7 +77,7 @@ div {
 									</c:otherwise>
 									</c:choose></td>
 								<td><c:choose>
-										<c:when test="${q.secret eq 'Y'}">
+										<c:when test="${!empty q.password }">
 											<input type="hidden" value="비밀" id="secret">
 											<img src="resources/img/111.jpg" width="30px" height="30px">
 										</c:when>
@@ -89,11 +86,9 @@ div {
 											<img src="resources/img/222.jpg" width="30px" height="30px">
 										</c:otherwise>
 									</c:choose></td>
-								<td><c:url var="qnaDetail" value="qnaDetail.do">
-										<c:param name="no" value="${q.no }" />
-									</c:url> <a href="${qnaDetail}">${q.title }</a></td>
+								<td>${q.title }</td>
 								<td>${q.writer }</td>
-								<td>${q.enrollDate }</td>
+								<td>${q.enroll_date }</td>
 								<td>${q.count}</td>
 							</tr>
 						</c:forEach>
@@ -118,8 +113,8 @@ div {
 				var num=$(this).children().eq(0).text();
 				var secret= $("#secret").val();
 		
-				if(secret=="공개" || ${loginUser.id eq "admin"}){
-					location.href="${qDetail}";
+				if(secret=="공개" || ${loginUser.id} ==  "admin"){
+					location.href="qnaDetail.do?no="+num;
 				} else {
 					var pwd=prompt("비밀번호를 입력하세요! (숫자 4자리)");
 					
@@ -129,7 +124,7 @@ div {
 						type : "post",
 						success : function(data){
 							if(data=="success")
-								location.href="${qDetail}?no="+num;
+								location.href="qnaDetail.do?no="+num;
 							else
 								alert("비밀번호가 틀렸습니다.");
 						},

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.jiha.jhpay.board.model.dao.BoardDao;
 import com.jiha.jhpay.board.model.vo.Board;
+import com.jiha.jhpay.board.model.vo.Reply;
 import com.jiha.jhpay.common.Pagination;
 import com.jiha.jhpay.common.model.vo.PageInfo;
 
@@ -28,5 +29,37 @@ public class BoardServiceImpl implements BoardService {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount);
 		return bDao.selectList(pi);
 	}
+
+	@Override
+	public int insertBoard(Board board) {
+		return bDao.insertBoard(board);
+		
+	}
+
+	@Override
+	public Board detailQna(int no, boolean flag) {
+		if(!flag) {
+			bDao.addReadCount(no);
+		}
+		
+		return bDao.selectQna(no);
+	}
+
+	@Override
+	public ArrayList<Reply> selectReplyList(int no) {
+		return bDao.selectReplyList(no);
+	}
+
+	@Override
+	public int insertReply(Reply r) {
+		return bDao.insertReply(r);
+	}
+
+	@Override
+	public int deleteReply(int rId) {
+		return bDao.deleteReply(rId);
+	}
+
+	
 
 }

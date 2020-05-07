@@ -8,18 +8,19 @@
 		<result property="status" column="status" />
 		<result property="password" column="password" />
 		<result property="count" column="count" />
-		<result property="modifyDate" column="modify_date" />
+		<result property="modify_date" column="modify_date" />
 		<result property="title" column="title" />
 		<result property="content" column="bcontent" />
 	</resultMap>
 
-	<resultMap type="Reply" id="replyResultSet">
+	<resultMap type="Reply" id="ReplyResultSet">
 		<id property="rNo" column="r_no" />
 		<result property="rContent" column="rcontent" />
 		<result property="rWriter" column="rwriter" />
 		<result property="rEnrollDate" column="enroll_date" />
 		<result property="refBno" column="b_no" />
 		<result property="rStatus" column="status" />
+		<result property="password" column="password" />
 	</resultMap>
 
 	<select id="selectList" resultMap="BoardResultSet">
@@ -32,4 +33,46 @@
 		from board
 		where status='Y'
 	</select>
+	<insert id="insertBoard">
+		insert into board values(board_seq.nextval,#{content},#{writer},sysdate,
+			'Y',#{password},#{title},0,sysdate,#{secret})
+	</insert>
+	
+	<update id="updateCount" parameterType="_int">
+		update board
+		set count= count +1
+		where b_no=#{no}
+	</update>
+	
+	<select id="selectQna" resultMap="BoardResultSet">
+		select *
+		from board
+		where b_no=#{no}
+		and status= 'Y'
+	</select>
+	
+	<update id="deleteQna">
+		update board 
+		set status='N'
+		where b_no=#{no}
+	</update>
+	
+	<select id="selectReplyList" resultMap="ReplyResultSet">
+		select * 
+		from reply
+		where b_no=#{no}
+		and status='Y'
+	</select>
+	
+	<insert id="insertReply">
+		insert into reply
+		values(reply_seq.nextval,#{rContent},#{rWriter},sysdate,'Y',#{refBno})
+	</insert>
+	
+	<update id="deleteReply">
+		update reply 
+		set status='N'
+		where r_no=#{rId}
+	</update>
+	
 </mapper>

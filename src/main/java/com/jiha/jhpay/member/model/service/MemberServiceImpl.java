@@ -39,4 +39,12 @@ public class MemberServiceImpl implements MemberService {
 		return loginUser;
 	}
 
+	@Override
+	public int kakaoLogin(Member vo) {
+		String encPwd= bcryptPasswordEncoder.encode(vo.getPwd());
+		vo.setPwd(encPwd);
+		
+		return mDao.insertMember(vo);
+	}
+
 }

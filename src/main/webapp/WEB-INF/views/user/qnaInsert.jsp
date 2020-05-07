@@ -46,7 +46,7 @@ div {
 	<div class="wrapper">
 		<div>
 			<h2 style="text-align: center">QnA 작성</h2>
-			<form action="<%=request.getContextPath()%>/insert.qna" name="form"
+			<form action="insert_qna.do" name="form"
 				method="post" onsubmit="return validate();">
 				<table class="table">
 					<tr>
@@ -96,8 +96,7 @@ div {
 				<hr>
 
 				<div class="wrap2">
-					<input type="button" class="btn btn-outline-secondary"
-						value="WRITE" onclick="pass()" /> <input type="button"
+					<button class="btn btn-outline-secondary">WRITE</button> <input type="button"
 						class="btn btn-outline-secondary" value="CANCEL"
 						onclick="javascript:history.back();">
 				</div>
@@ -124,8 +123,8 @@ div {
 				return false;
 			}
 
-			if ($("#summernote").html().length < 15) {
-				alert("내용을 입력해주세요")
+			if ($("#summernote").val().length < 15) {
+				alert("15자 이상의 내용을 입력해주세요");
 				return false;
 			}
 			
@@ -141,6 +140,8 @@ div {
 					return false;
 				}
 			}
+			}else{
+				$("#password").val("");
 			}
 			
 			return true;

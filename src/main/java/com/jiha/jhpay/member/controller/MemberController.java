@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.List;
+
 
 import javax.imageio.ImageIO;
 import javax.mail.internet.InternetAddress;
@@ -26,12 +28,14 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -39,9 +43,24 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.jiha.jhpay.member.model.vo.Member;
+import com.jiha.jhpay.common.kakaoLogin;
 import com.jiha.jhpay.member.exception.MemberException;
 import com.jiha.jhpay.member.model.service.MemberService;
 
+
+import javax.servlet.http.HttpSession;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.springframework.web.bind.annotation.RequestMethod;
+import com.jiha.jhpay.common.kakaoLogin;
+import com.jiha.jhpay.member.model.vo.Member;
+import com.fasterxml.jackson.databind.JsonNode;
 @SessionAttributes({"loginUser","msg"})
 
 @Controller
@@ -55,7 +74,7 @@ public class MemberController {
 	private Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
 	@RequestMapping("login.do")
-	public String login(Member mem,Model model,HttpServletResponse response) {
+	public String login(Member mem,Model model,HttpServletResponse response,RedirectAttributes rd) {
 		Member loginMember = mService.loginMember(mem); //아이디로 비번 뽑고 암호화비번과 비교 후 가져옴
 
 		
@@ -82,10 +101,18 @@ public class MemberController {
 			model.addAttribute("loginUser", loginMember);
 			return "store/storePage";
 		}else {
-			throw new MemberException("로그인 실패!!");	
+			rd.addFlashAttribute("msg", "로그인 실패! 아이디,비밀번호를 확인해주세요.");
+			return "redirect:loginPage.do";
+			
 		}
 		
 	}
+	
+	@RequestMapping("/loginPage.do")
+	public String login() {
+		return "common/login";
+	}
+	
 	@RequestMapping("signup.do")
 	public String signup() {
 		return "common/signup";
@@ -210,5 +237,32 @@ public class MemberController {
 
 		return content;
 	}
+	
+	@RequestMapping(value = "/kakaologin" , produces = "application/json", method = {RequestMethod.GET, RequestMethod.POST})
+	public String kakaoLogin(@RequestParam("code") String code , Model model,HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception{
+
+		System.out.println("login!");
+	  JsonNode token = kakaoLogin.getAccessToken(code);
+
+	  JsonNode profile = kakaoLogin.getKakaoUserInfo(token.path("access_token").toString());
+	  System.out.println(profile);
+	  Member vo = kakaoLogin.changeData(profile);
+	  vo.setId("k"+vo.getId());
+
+	  System.out.println(session);
+	  session.setAttribute("login", vo);
+	  System.out.println(vo.toString());
+
+	  vo.setQrcode(makeqr(request,session,vo.getStoreName()));
+	  int result = mService.kakaoLogin(vo); 
+
+		if(logger.isDebugEnabled())
+				logger.info(vo.getId() + " 로그인");
+			
+			model.addAttribute("loginUser", vo);
+			return "store/storePage";
+		
+	}
+	
 
 }
