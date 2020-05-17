@@ -47,11 +47,15 @@ public class BoardController {
 
 	@RequestMapping(value = "qnaPwdCheck.do", produces = "application/text; charset=utf8")
 	public String qnaView(HttpServletResponse response, String pwd, int no) {
+		System.out.println(pwd);System.out.println(no);
 		int result = bService.qnaPwdCheck(pwd, no);
+		System.out.println(result);
 		if (result > 0) {
+			System.out.println("굳");
 			return "success";
 		}
-		return "비밀번호 틀림";
+		System.out.println("왓?");
+		return "no";
 	}
 
 	@RequestMapping("qnaInsertView.do")

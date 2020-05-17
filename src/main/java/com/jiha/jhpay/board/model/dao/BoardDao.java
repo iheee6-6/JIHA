@@ -22,7 +22,7 @@ public class BoardDao {
 			Map<String,Object> map = new HashMap<>();
 			map.put("pwd", pwd);
 			map.put("no", no);
-			return sqlSession.update("boardMapper.qnaPwdCheck",map);
+			return sqlSession.selectOne("boardMapper.qnaPwdCheck",map);
 		}
 
 	public int getListCount() {

@@ -67,8 +67,8 @@
 		<c:remove var="msg" />
 	</c:if>
 	<form method="post" class="form-signin" action="login.do">
-		<img class="mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg"
-			alt="" width="72" height="72">
+		
+	<b>JHPAY</b>
 		<h1 class="h3 mb-3 font-weight-normal">환영합니다</h1>
 		<label for="inputEmail" class="sr-only">ID</label> <input
 			type="text" id="userId" class="form-control"
@@ -85,7 +85,7 @@
 	<br>
 		<button class="btn btn-lg btn-primary btn-block" type="submit">로그인</button>
 		<br>
-		<a href="https://kauth.kakao.com/oauth/authorize?client_id=3e5c1fd36480d5993799a0e07c2cedb5&redirect_uri=http://localhost:8800/kakaologin&response_type=code">
+		<a href="https://kauth.kakao.com/oauth/authorize?client_id=3e5c1fd36480d5993799a0e07c2cedb5&redirect_uri=http://localhost:8800/jhpay/kakaologin.do&response_type=code">
 		<img src="//mud-kage.kakao.com/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg" width="300"/>
 	</a>
 		<br> <a href="signup.do"> 회원가입</a>

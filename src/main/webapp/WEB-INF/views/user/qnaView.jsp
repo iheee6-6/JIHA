@@ -112,8 +112,10 @@ div {
 		$("#Qlist tr").click(function(){
 				var num=$(this).children().eq(0).text();
 				var secret= $("#secret").val();
-		
-				if(secret=="공개" || ${loginUser.id} ==  "admin"){
+				<c:if test="${loginUser.id eq 'admin'}">
+					location.href="qnaDetail.do?no="+num;
+				</c:if>
+				if(secret=="공개"){
 					location.href="qnaDetail.do?no="+num;
 				} else {
 					var pwd=prompt("비밀번호를 입력하세요! (숫자 4자리)");
@@ -128,8 +130,9 @@ div {
 							else
 								alert("비밀번호가 틀렸습니다.");
 						},
-						error : function(){
+						error : function(e){
 							alert("오류");
+							console.log(e);
 						}					
 					});
 					

@@ -59,7 +59,7 @@ div {
 						<td><c:if test="${empty loginUser}">
 								<input name="writer" type="text" value="비회원">
 							</c:if> <c:if test="${!empty loginUser }">
-								<input name="writer" type="text" value="${loginUser.name}"
+								<input name="writer" type="text" value="${loginUser.id}"
 									readonly>
 							</c:if></td>
 						<td>작성일</td>
@@ -72,10 +72,10 @@ div {
 
 					<tr>
 						<td>비밀글 설정</td>
-						<td><input type="radio" value="true" name="secret"
+						<td><input type="radio" value="private" name="secret"
 							id="private"> <label for="private"> <img
 								src="resources/img/111.jpg" width="30px" height="30px"></label>
-							&nbsp; <input type="radio" value="false" name="secret"
+							&nbsp; <input type="radio" value="public" name="secret"
 							id="public" checked> <label for="public"><img
 								src="resources/img/222.jpg" width="30px" height="30px"></label></td>
 						<td>비밀번호</td>
@@ -130,21 +130,29 @@ div {
 			
 			if($("input:radio[name='secret']:checked").val()=="private"){
 			var bpwd = document.getElementById('password');
+
+			console.log("fg1");
 			if (!chk(/^[0-9]{4}$/, bpwd, "비밀번호는 숫자 4자리 입력해주세요!"))
 				return false;
-			function chk(re, e, msg) { //정규식, element, 메세지
-				if (!re.test(e.value)) {
-					alert(msg);
-					e.value = "";
-					e.focus();
-					return false;
-				}
-			}
 			}else{
 				$("#password").val("");
 			}
 			
+			
+			console.log("fg");
 			return true;
+		}
+		
+		function chk(re, e, msg) { //정규식, element, 메세지
+			if (!re.test(e.value)) {
+				alert(msg);
+				e.value = "";
+				e.focus();
+				console.log("fg2");
+				return false;
+			}else{
+				return true;
+			}
 		}
 	</script>
 
