@@ -28,14 +28,22 @@
 		where status='Y'
 		order by enroll_date desc
 	</select>
+	
+	<select id="qnaPwdCheck" resultType="_int">
+		select count(*)
+		from board
+		where b_no=#{no} and password=#{pwd}
+	</select>
+	
 	<select id="getListCount" resultType="_int">
 		select count(*)
 		from board
 		where status='Y'
 	</select>
+	
 	<insert id="insertBoard">
 		insert into board values(board_seq.nextval,#{content},#{writer},sysdate,
-			'Y',#{password},#{title},0,sysdate,#{secret})
+			'Y',#{password},#{title},0,sysdate)
 	</insert>
 	
 	<update id="updateCount" parameterType="_int">
@@ -66,13 +74,38 @@
 	
 	<insert id="insertReply">
 		insert into reply
-		values(reply_seq.nextval,#{rContent},#{rWriter},sysdate,'Y',#{refBno})
+		values(reply_seq.nextval,#{rContent},#{rWriter},sysdate,'Y',#{refBno},null,default)
 	</insert>
 	
 	<update id="deleteReply">
 		update reply 
 		set status='N'
 		where r_no=#{rId}
+	</update>
+	
+	<update id="updateReply">
+		update reply
+		set rcontent=#{rContent} and 
+		secret=#{secret}
+		where r_no=#{rNo}
+	</update>
+	
+	<insert id="insertRReply">
+		insert into reply
+		values(reply_seq.nextval,#{rContent},#{rWriter},sysdate,'Y',null,#{refRno},default)
+	</insert>
+	
+	<update id="deleteRReply">
+		update reply 
+		set status='N'
+		where r_no=#{rId}
+	</update>
+	
+	<update id="updateRReply">
+		update reply
+		set rcontent=#{rContent} and 
+		secret=#{secret}
+		where r_no=#{rNo}
 	</update>
 	
 </mapper>

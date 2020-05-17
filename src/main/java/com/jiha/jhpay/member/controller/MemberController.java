@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -61,7 +62,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.jiha.jhpay.common.kakaoLogin;
 import com.jiha.jhpay.member.model.vo.Member;
 import com.fasterxml.jackson.databind.JsonNode;
-@SessionAttributes({"loginUser","msg"})
+@SessionAttributes({"loginUser","msg","access_token"})
 
 @Controller
 public class MemberController {
@@ -238,13 +239,14 @@ public class MemberController {
 		return content;
 	}
 	
-	@RequestMapping(value = "/kakaologin" , produces = "application/json", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "/kakaologin.do" , produces = "application/json", method = {RequestMethod.GET, RequestMethod.POST})
 	public String kakaoLogin(@RequestParam("code") String code , Model model,HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception{
 
 		System.out.println("login!");
 	  JsonNode token = kakaoLogin.getAccessToken(code);
 
-	  JsonNode profile = kakaoLogin.getKakaoUserInfo(token.path("access_token").toString());
+	  JsonNode profile = kakaoLogin.getKakaoUserInfo(token.get("access_token"));
+	  //JsonNode profile = kakaoLogin.getKakaoUserInfo(token.path("access_token").toString());
 	  System.out.println(profile);
 	  Member vo = kakaoLogin.changeData(profile);
 	  vo.setId("k"+vo.getId());
@@ -257,12 +259,29 @@ public class MemberController {
 	  int result = mService.kakaoLogin(vo); 
 
 		if(logger.isDebugEnabled())
-				logger.info(vo.getId() + " 로그인");
-			
+			logger.info(vo.getId() + " 로그인");
 			model.addAttribute("loginUser", vo);
+			model.addAttribute("access_token", token.get("access_token"));
 			return "store/storePage";
-		
+	
 	}
 	
+//	@RequestMapping(value="/logout")
+//	public String logout(HttpSession session) {
+//	    kakaoLogin.kakaoLogout((String)session.getAttribute("access_token"));
+//	    session.removeAttribute("access_Token");
+//	    session.removeAttribute("loginUser");
+//	    return "index";
+//	}
 
+	@RequestMapping("logout.do")
+	public String logout(SessionStatus status) {
+		// 로그아웃 처리를 위해 커맨드 객체로 세션의 상태를 관리할 수 있는 SessionStatus 객체가 필요
+		
+		status.setComplete();
+		// 세션의 상태를 확정 지어주는 메소드 호출이 필요함.
+		
+		// return "home"; : forward 방식
+		return "redirect:loginPage.do"; // redirect 방식
+	}
 }
