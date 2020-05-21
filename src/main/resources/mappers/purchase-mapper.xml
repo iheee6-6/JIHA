@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="purchaseMapper">
+	<resultMap type="Purchase" id="purchaseResultSet">
+		<id property="purchaseNo" column="o_no" />
+		<result property="phone" column="phone" />
+		<result property="buyDate" column="buyDate" />
+		<result property="phoneNumber" column="phone" />
+		<result property="status" column="status" />
+
+
+		<result property="M_NO" column="M_NO" />
+	</resultMap>
+	<resultMap type="Basket" id="basketResultSet">
+		<id property="purchaseNo" column="o_no" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<result property="count" column="count" />
+		<result property="need" column="need" />
+	</resultMap>
+	<!-- 주문 넣기 -->
+	<insert id="insertOrder">
+		insert into ORDER
+		values(o_seq.nextval,#{phone},#{price},default,sysdate,#{m_no})
+	</insert>
+
+	<insert id="insertOrderB">
+		<foreach collection="list" item="item" index="index">
+			insert into basket
+			values(o_seq.currval,#{name},#{price},#{count},#{need})
+		</foreach>
+	</insert>
+
+	<update id="updateMenuAmount">
+
+		update menu set amount=amount-1
+		where m_id= #{m_id} and f_name in
+		<foreach collection="list" item="item" index="index"
+			separator="," open="(" close=")">
+			#{name}
+		</foreach>
+	</update>
+
+	<select id="selectONum">
+		select o_seq.currval
+		from dual
+	</select>
+
+	<!-- 주문내역 보내기 (구매자) -->
+	<select id="selectOrder">
+		select * from order
+		join basket using(o_no)
+		where
+		o_no=#{purchaseNo}
+	</select>
+
+	<!-- 주문 현황 (사업자) -->
+	<select id="selectBussOrder">
+		select * from order
+		join basket using(o_no)
+		where
+		m_no=#{m_no}
+	</select>
+
+	<!-- 주문 상태 바꾸기 -->
+	<update id="updateBussOrder">
+		update order set o_status ='N'
+		where
+		o_no=#{purchaseNo}
+	</update>
+
+	<!-- 음식 완성 알림-->
+		<select id="selectPhone">
+			select phone 
+			from order
+			where o_no=#{purchaseNo}
+		</select>
+</mapper>

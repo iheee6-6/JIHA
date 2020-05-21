@@ -44,6 +44,8 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.jiha.jhpay.member.model.vo.Member;
+import com.jiha.jhpay.store.model.vo.Menu;
+import com.jiha.jhpay.store.model.vo.Purchase;
 import com.jiha.jhpay.common.kakaoLogin;
 import com.jiha.jhpay.member.exception.MemberException;
 import com.jiha.jhpay.member.model.service.MemberService;

@@ -2,6 +2,7 @@ package com.jiha.jhpay.member.model.service;
 
 
 import com.jiha.jhpay.member.model.vo.Member;
+import com.jiha.jhpay.store.model.vo.Purchase;
 
 public interface MemberService {
 
@@ -12,6 +13,7 @@ public interface MemberService {
 	Member loginMember(Member mem);
 
 	int kakaoLogin(Member vo);
+
 
 
 }

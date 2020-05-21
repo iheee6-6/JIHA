@@ -13,11 +13,11 @@
 		<result property="mStatus" column="M_STATUS" />
 		<result property="enrollDate" column="ENROLL_DATE" />
 		<result property="storeName" column="s_name" />
-		<result property="b_no" column="b_no" />
+		<result property="m_no" column="m_no" />
 	</resultMap>
 	<insert id="insertMember">
 		insert into member values(#{id},#{address},#{phone},#{pwd},
-		#{email},#{b_no},#{storeName},#{qrcode},#{name},default)
+		#{email},m_seq.nextval(),#{storeName},#{qrcode},#{name},default)
 	</insert>
 
 	<select id="dupId" parameterType="string" resultType="_int">
