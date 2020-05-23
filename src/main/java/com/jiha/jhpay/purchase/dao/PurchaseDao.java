@@ -16,4 +16,16 @@ public class PurchaseDao {
 		return sqlSession.insert("purchaseMapper.insertOrder",purchase);
 	}
 
+	public int insertOrderB(Purchase purchase) {
+		return sqlSession.insert("purchaseMapper.insertOrderB",purchase);
+	}
+
+	public int updateMenuAmount(Purchase purchase) {
+		return sqlSession.insert("purchaseMapper.updateMenuAmount",purchase);
+	}
+
+	public int selectONum(Purchase purchase) {
+		return sqlSession.insert("purchaseMapper.selectONum",purchase);
+	}
+
 }

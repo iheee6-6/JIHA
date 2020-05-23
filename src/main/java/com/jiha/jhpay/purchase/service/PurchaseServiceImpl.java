@@ -14,7 +14,15 @@ public class PurchaseServiceImpl implements PurchaseService {
 	
 	@Override
 	public int insertOrder(Purchase purchase) {
-		return pDao.insertOrder(purchase);
+		int result= pDao.insertOrder(purchase);
+		result+= pDao.insertOrderB(purchase);
+		result += pDao.updateMenuAmount(purchase);
+		return result;
+	}
+
+	@Override
+	public int getOrderNo(Purchase purchase) {
+		return pDao.selectONum(purchase);
 	}
 
 }

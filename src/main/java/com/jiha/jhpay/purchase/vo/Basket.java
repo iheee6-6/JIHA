@@ -1,6 +1,8 @@
 package com.jiha.jhpay.purchase.vo;
 
-public class Basket {
+import com.jiha.jhpay.store.model.vo.Store;
+
+public class Basket extends Store {
 
 	private int purchaseNo; //예매번호
 	private String menu_no; //메뉴 번호

@@ -17,11 +17,13 @@ PurchaseService pService;
 public ModelAndView order(ModelAndView mv,Purchase purchase) {
 	int result =pService.insertOrder(purchase);
 	if(result>0) {
+		int num =pService.getOrderNo(purchase);
+		if(num>0)
+		purchase.setPurchaseNo(num);
 		mv.addObject("purchase", purchase);
 		mv.setViewName("user/resultView");
-	}else {
-		return throws Exception();
 	}
 	return mv;
 }
+
 }

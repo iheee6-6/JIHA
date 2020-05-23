@@ -6,4 +6,6 @@ public interface PurchaseService {
 
 	int insertOrder(Purchase purchase);
 
+	int getOrderNo(Purchase purchase);
+
 }

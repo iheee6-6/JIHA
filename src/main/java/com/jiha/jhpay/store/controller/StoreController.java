@@ -134,5 +134,8 @@ public class StoreController {
 		return "redirect:bMenuList.do";
 	}
 	
-	
+	@RequestMapping("sloveOrder")
+	public String sloveOrder(@RequestParam(value="oNo")int oNo,RedirectAttributes rd) {
+		return "redirect:bOrders.do";
+	}
 }
