@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.List;
 
-
 import javax.imageio.ImageIO;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -45,11 +44,9 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.jiha.jhpay.member.model.vo.Member;
 import com.jiha.jhpay.store.model.vo.Menu;
-import com.jiha.jhpay.store.model.vo.Purchase;
 import com.jiha.jhpay.common.kakaoLogin;
 import com.jiha.jhpay.member.exception.MemberException;
 import com.jiha.jhpay.member.model.service.MemberService;
-
 
 import javax.servlet.http.HttpSession;
 
@@ -64,139 +61,137 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.jiha.jhpay.common.kakaoLogin;
 import com.jiha.jhpay.member.model.vo.Member;
 import com.fasterxml.jackson.databind.JsonNode;
-@SessionAttributes({"loginUser","msg","access_token"})
+
+@SessionAttributes({ "loginUser", "msg", "access_token" })
 
 @Controller
 public class MemberController {
 	@Autowired
 	private MemberService mService;
-	
+
 	@Autowired
 	private JavaMailSender mailSender;
-	
-	private Logger logger = LoggerFactory.getLogger(MemberController.class);
-	
-	@RequestMapping("login.do")
-	public String login(Member mem,Model model,HttpServletResponse response,RedirectAttributes rd) {
-		Member loginMember = mService.loginMember(mem); //아이디로 비번 뽑고 암호화비번과 비교 후 가져옴
 
-		
-		if(loginMember !=null) {
-			if(logger.isDebugEnabled())
+	private Logger logger = LoggerFactory.getLogger(MemberController.class);
+
+	@RequestMapping("login.do")
+	public String login(Member mem, Model model, String remember, HttpServletResponse response, RedirectAttributes rd) {
+		Member loginMember = mService.loginMember(mem); // 아이디로 비번 뽑고 암호화비번과 비교 후 가져옴
+		System.out.println(remember);
+		if (loginMember != null) {
+			if (logger.isDebugEnabled())
 				logger.info(loginMember.getId() + " 로그인");
-			
-//			Cookie cookie = new Cookie("user_check", loginMember.getId());
-//			if (remember.equals("true")) {
-//				response.addCookie(cookie);
-//				System.out.println("쿠키 아이디저장 O");
-//				// 쿠키 확인
-//				// System.out.println("Service check" + cookie);
-//			} else {
-//				System.out.println("쿠키 아이디저장 X");
-//				cookie.setMaxAge(0);
-//				response.addCookie(cookie);
-//			}
-//
-//			System.out.println("3단계-로그인단계");
-//			// 세션 저장하기 전에 비밀번호 가리기
-//			loginMember.setPwd("");
+
+			if (remember!= null && remember.equals("true")) {
+				Cookie cookie = new Cookie("remember", loginMember.getId());
+				
+				cookie.setMaxAge(60*60*24*7);// 단위는 (초)임으로 7일정도로 유효시간을 설정해 준다.
+	             response.addCookie(cookie);
+				System.out.println("쿠키 아이디저장 O");
+				   // 쿠키를 적용해 준다.
+
+				// 쿠키 확인
+				System.out.println("Service check" + cookie);
+			} else {
+				System.out.println("쿠키 아이디저장 X");
+			}
+
+			System.out.println("3단계-로그인단계");
+			// 세션 저장하기 전에 비밀번호 가리기
+			loginMember.setPwd("");
 
 			model.addAttribute("loginUser", loginMember);
 			return "store/storePage";
-		}else {
+		} else {
 			rd.addFlashAttribute("msg", "로그인 실패! 아이디,비밀번호를 확인해주세요.");
 			return "redirect:loginPage.do";
-			
+
 		}
-		
+
 	}
-	
+
 	@RequestMapping("/loginPage.do")
 	public String login() {
 		return "common/login";
 	}
-	
+
 	@RequestMapping("signup.do")
 	public String signup() {
 		return "common/signup";
 	}
+
 	@RequestMapping("join.do")
-	public String join(Member m, 
-			@RequestParam("post") String post,
-			@RequestParam("address1") String address1,
-			@RequestParam("address2") String address2,
-			@RequestParam("phone1") String phone1,
-			@RequestParam("phone2") String phone2,
-			@RequestParam("phone3") String phone3,
-			Model model, HttpServletRequest request,HttpSession session
-			) throws WriterException, IOException {
-		
-		m.setAddress(address1+","+address2);
-		m.setPhone(phone1+"-"+phone2+'-'+phone3);
-		
-		m.setQrcode(makeqr(request,session,m.getStoreName()));
-		
+	public String join(Member m, @RequestParam("post") String post, @RequestParam("address1") String address1,
+			@RequestParam("address2") String address2, @RequestParam("phone1") String phone1,
+			@RequestParam("phone2") String phone2, @RequestParam("phone3") String phone3, Model model,
+			HttpServletRequest request, HttpSession session) throws WriterException, IOException {
+
+		m.setAddress(address1 + "," + address2);
+		m.setPhone(phone1 + "-" + phone2 + '-' + phone3);
+
+		m.setQrcode(makeqr(request, session, m.getM_no()));
+
 		int result = mService.insertMember(m);
-		if(result>0) {
+		if (result > 0) {
 			model.addAttribute("msg", "회원가입이 완료 되었습니다. 로그인 해주세요.");
 			return "common/login";
-		}else {
+		} else {
 			model.addAttribute("msg", "회원 가입 실패!!");
 			return "common/errorPage";
 		}
 	}
-	
+
 	@RequestMapping("qr.do")
-	public String makeqr(HttpServletRequest request,HttpSession session,String storeName) throws WriterException, IOException {
-		
+	public String makeqr(HttpServletRequest request, HttpSession session, String m_no)
+			throws WriterException, IOException {
+
 		String root = request.getSession().getServletContext().getRealPath("resources");
 
 		String savePath = root + "\\qrCodes\\"; // 파일 경로 수정
 
 		File file = new File(savePath);
-        if(!file.exists()) {
-            file.mkdirs();
-        }
-        String url = "http://192.168.35.153/jhpay/enterStore.do?store="+storeName;
-        // 코드인식시 링크걸 URL주소
-        String codeurl = new String(url.getBytes("UTF-8"), "ISO-8859-1");
-        // 큐알코드 바코드 생상값
-        int qrcodeColor =   0xFF2e4e96;
-        // 큐알코드 배경색상값
-        int backgroundColor = 0xFFFFFFFF;
-         
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        // 3,4번째 parameter값 : width/height값 지정
-        BitMatrix bitMatrix = qrCodeWriter.encode(codeurl, BarcodeFormat.QR_CODE,200, 200);
-        //
-        MatrixToImageConfig matrixToImageConfig = new MatrixToImageConfig(qrcodeColor,backgroundColor);
-        BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix,matrixToImageConfig);
-        // ImageIO를 사용한 바코드 파일쓰기
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String fileName=sdf.format(new Date()) +storeName;
-        File temp =  new File(savePath+fileName+".png"); 
-        //File temp =  File.createTempFile(fileName, ".png"); 
-        ImageIO.write(bufferedImage, "png",temp);
-        
-        return fileName+".png";
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		String url = "http://192.168.35.153/jhpay/enterStore.do?store=" + m_no;
+		// 코드인식시 링크걸 URL주소
+		String codeurl = new String(url.getBytes("UTF-8"), "ISO-8859-1");
+		// 큐알코드 바코드 생상값
+		int qrcodeColor = 0xFF2e4e96;
+		// 큐알코드 배경색상값
+		int backgroundColor = 0xFFFFFFFF;
+
+		QRCodeWriter qrCodeWriter = new QRCodeWriter();
+		// 3,4번째 parameter값 : width/height값 지정
+		BitMatrix bitMatrix = qrCodeWriter.encode(codeurl, BarcodeFormat.QR_CODE, 200, 200);
+		//
+		MatrixToImageConfig matrixToImageConfig = new MatrixToImageConfig(qrcodeColor, backgroundColor);
+		BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix, matrixToImageConfig);
+		// ImageIO를 사용한 바코드 파일쓰기
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		String fileName = sdf.format(new Date()) + m_no;
+		File temp = new File(savePath + fileName + ".png");
+		// File temp = File.createTempFile(fileName, ".png");
+		ImageIO.write(bufferedImage, "png", temp);
+
+		return fileName + ".png";
 	}
-	
+
 	@RequestMapping("dupId.do")
 	public ModelAndView idDuplicateCheck(ModelAndView mv, String id) {
-		
+
 		boolean isUsable = mService.checkIdDup(id) == 0 ? true : false;
-		
+
 		Map map = new HashMap();
 		map.put("isUsable", isUsable);
-		
+
 		mv.addAllObjects(map);
-		
+
 		mv.setViewName("jsonView");
-		
+
 		return mv; // json객체로 넘어감
 	}
-	
-	
+
 	@RequestMapping(value = "email.do")
 	@ResponseBody
 	public String mailSending(HttpServletRequest request, String email) {
@@ -224,7 +219,7 @@ public class MemberController {
 			}
 		}
 
-		String content =temp.toString(); // 내용
+		String content = temp.toString(); // 내용
 		try {
 			MimeMessage message = mailSender.createMimeMessage();
 			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
@@ -240,33 +235,57 @@ public class MemberController {
 
 		return content;
 	}
-	
-	@RequestMapping(value = "/kakaologin.do" , produces = "application/json", method = {RequestMethod.GET, RequestMethod.POST})
-	public String kakaoLogin(@RequestParam("code") String code , Model model,HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception{
+
+	@RequestMapping(value = "/kakaologin.do", produces = "application/json", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public String kakaoLogin(@RequestParam("code") String code, Model model, HttpServletRequest request,
+			HttpServletResponse response, HttpSession session) throws Exception {
 
 		System.out.println("login!");
-	  JsonNode token = kakaoLogin.getAccessToken(code);
+		JsonNode token = kakaoLogin.getAccessToken(code);
 
-	  JsonNode profile = kakaoLogin.getKakaoUserInfo(token.get("access_token"));
-	  //JsonNode profile = kakaoLogin.getKakaoUserInfo(token.path("access_token").toString());
-	  System.out.println(profile);
-	  Member vo = kakaoLogin.changeData(profile);
-	  vo.setId("k"+vo.getId());
+		JsonNode profile = kakaoLogin.getKakaoUserInfo(token.get("access_token"));
+		// JsonNode profile =
+		// kakaoLogin.getKakaoUserInfo(token.path("access_token").toString());
+		System.out.println(profile);
+		Member vo = kakaoLogin.changeData(profile);
+		vo.setId("k" + vo.getId());
 
-	  System.out.println(session);
-	  session.setAttribute("login", vo);
-	  System.out.println(vo.toString());
+		System.out.println(session);
+		session.setAttribute("loginUser", vo);
+		System.out.println(vo.toString());
 
-	  vo.setQrcode(makeqr(request,session,vo.getStoreName()));
-	  int result = mService.kakaoLogin(vo); 
+		model.addAttribute("access_token", token.get("access_token"));
 
-		if(logger.isDebugEnabled())
-			logger.info(vo.getId() + " 로그인");
-			model.addAttribute("loginUser", vo);
-			model.addAttribute("access_token", token.get("access_token"));
+		int result = mService.kakaoLogin(vo);
+		if(result>0) {
 			return "store/storePage";
-	
+		}
+		return "user/kakaoLoginAdd";
+
 	}
+
+	@RequestMapping(value = "kakaoAdd.do")
+	public String kakaoAdd(Model model, Member vo, HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) {
+		System.out.println("컨트롤러");
+		Member mem= (Member) session.getAttribute("loginUser");
+		mem.setEmail(vo.getEmail());
+		mem.setPhone(vo.getPhone());
+		mem.setStoreName(vo.getStoreName());
+		try {
+			mem.setQrcode(makeqr(request, session, mem.getStoreName()));
+		} catch (WriterException | IOException e) {
+			e.printStackTrace();
+		}
+		int result = mService.kakaoAddLogin(mem);
+		if (result > 0)
+			if (logger.isDebugEnabled())
+				logger.info(mem.getId() + " 로그인");
+		model.addAttribute("loginUser", mem);
+		return "store/storePage";
+	}
+	
 	
 //	@RequestMapping(value="/logout")
 //	public String logout(HttpSession session) {
@@ -279,10 +298,10 @@ public class MemberController {
 	@RequestMapping("logout.do")
 	public String logout(SessionStatus status) {
 		// 로그아웃 처리를 위해 커맨드 객체로 세션의 상태를 관리할 수 있는 SessionStatus 객체가 필요
-		
+
 		status.setComplete();
 		// 세션의 상태를 확정 지어주는 메소드 호출이 필요함.
-		
+
 		// return "home"; : forward 방식
 		return "redirect:loginPage.do"; // redirect 방식
 	}

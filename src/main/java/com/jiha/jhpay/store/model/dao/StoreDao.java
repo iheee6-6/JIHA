@@ -19,13 +19,13 @@ public class StoreDao {
 		return sqlSession.insert("storeMapper.insertMenu",menu);
 	}
 
-	public ArrayList<Menu> selectMenuList(String id) {
-		return (ArrayList)sqlSession.selectList("storeMapper.selectMenuList",id);
+	public ArrayList<Menu> selectMenuList(String m_no) {
+		return (ArrayList)sqlSession.selectList("storeMapper.selectMenuList",m_no);
 	}
 
-	public int deleteMenu(String id, String menuNo) {
+	public int deleteMenu(String m_no, String menuNo) {
 		Map<String,String> map = new HashMap<>();
-		map.put("id", id);
+		map.put("m_no", m_no);
 		map.put("menuNo", menuNo);
 		return sqlSession.update("storeMapper.deleteMenu",map);
 	}

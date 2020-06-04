@@ -19,9 +19,12 @@ public interface BoardService {
 	Board detailQna(int no, boolean flag);
 
 	ArrayList<Reply> selectReplyList(int cNo);
+	
+	ArrayList<Reply> selectRReplyList(int refNo);
 
 	int insertReply(Reply r);
 
 	int deleteReply(int rId);
+
 	
 }

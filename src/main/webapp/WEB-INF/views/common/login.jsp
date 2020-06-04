@@ -57,7 +57,7 @@
 <link href="resources/css/common/signin.css" rel="stylesheet">
 
 <!-- js -->
-<script src="${contextPath}/resources/js/cookie.js"></script>
+<!--  <script src="${contextPath}/resources/js/cookie.js"></script>-->
 </head>
 <body class="text-center">
 	<c:if test="${ !empty msg }">
@@ -71,14 +71,14 @@
 	<b>JHPAY</b>
 		<h1 class="h3 mb-3 font-weight-normal">환영합니다</h1>
 		<label for="inputEmail" class="sr-only">ID</label> <input
-			type="text" id="userId" class="form-control"
+			type="text" id="userId" class="form-control" value="${cookie.remember.value }"
 			placeholder="ID" name="id" required autofocus> <label
 			for="inputPassword" class="sr-only">Password</label> <input
 			type="password" id="inputPassword" class="form-control"
 			placeholder="Password" name="pwd" required>
 		<div class="checkbox mb-3">
-			<label> <input name="remember" id="remember" type="checkbox" value="remember-me">
-				Remember me
+			<label> <input name="remember" id="remember" type="checkbox" value="true">
+				Remember ID
 			</label>
 		</div>
 	

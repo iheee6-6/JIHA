@@ -52,6 +52,10 @@ public class BoardDao {
 	public ArrayList<Reply> selectReplyList(int no) {
 		return (ArrayList)sqlSession.selectList("boardMapper.selectReplyList",no);
 	}
+	
+	public ArrayList<Reply> selectRReplyList(int refNo) {
+		return (ArrayList)sqlSession.selectList("boardMapper.selectRReplyList",refNo);
+	}
 
 	public int insertReply(Reply r) {
 		return sqlSession.insert("boardMapper.insertReply",r);
@@ -60,5 +64,6 @@ public class BoardDao {
 	public int deleteReply(int rId) {
 		return sqlSession.update("boardMapper.deleteReply",rId);
 	}
+
 
 }

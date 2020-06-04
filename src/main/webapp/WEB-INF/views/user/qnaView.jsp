@@ -52,16 +52,7 @@ div {
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>1</td>
-							<td>관리자</td>
-							<td><img src="resources/img/222.jpg" width="30px"
-								height="30px"></td>
-							<td>공지사항입니다. 페이코 나빠요.</td>
-							<td>admin</td>
-							<td>2020.03.31</td>
-							<td>0</td>
-						</tr>
+						
 						<c:forEach var="q" items="${qnaList}" varStatus="status">
 							<tr>
 								<td>${q.no}</td>
@@ -110,8 +101,10 @@ div {
 	<script>
 	$(function(){
 		$("#Qlist tr").click(function(){
+			
 				var num=$(this).children().eq(0).text();
-				var secret= $("#secret").val();
+				var secret= $(this).find('#secret').val();
+				console.log(num+secret);
 				<c:if test="${loginUser.id eq 'admin'}">
 					location.href="qnaDetail.do?no="+num;
 				</c:if>

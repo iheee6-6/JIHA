@@ -29,9 +29,9 @@ public class StoreController {
 	private StoreService sService;
 	
 	@RequestMapping("enterStore.do")
-	public ModelAndView enterStore(ModelAndView mv,String store) {
+	public ModelAndView enterStore(ModelAndView mv,String m_no) {
 		
-		ArrayList<Menu> mList=sService.selectStoreMenuList(store);
+		ArrayList<Menu> mList=sService.selectStoreMenuList(m_no);
 		
 		mv.addObject("menuList", mList);
 		mv.setViewName("user/enterStore");
@@ -54,7 +54,7 @@ public class StoreController {
 	public ModelAndView bMenuList(ModelAndView mv, HttpSession session) {
 		Member mem= (Member) session.getAttribute("loginUser");
 		
-		ArrayList<Menu> mList=sService.selectMenuList(mem.getId());
+		ArrayList<Menu> mList=sService.selectMenuList(mem.getM_no());
 		System.out.println(mList);
 		mv.addObject("menuList", mList);
 		mv.setViewName("store/storeMenu");
@@ -66,7 +66,7 @@ public class StoreController {
 			Menu menu, @RequestParam(value = "uploadFile", required = false) MultipartFile file) {
 		
 		Member mem=(Member) session.getAttribute("loginUser");
-		menu.setM_id(mem.getId());
+		menu.setM_no(mem.getM_no());
 		
 		if (!file.getOriginalFilename().equals("")) {
 			String renameFileName = saveFile(file, request);
@@ -124,12 +124,12 @@ public class StoreController {
 		Member mem= (Member) session.getAttribute("loginUser");
 		int result=0;
 		for (int i = 0; i < menuCh.size(); i++)
-			result += sService.deleteMenu(mem.getId(), menuCh.get(i));
+			result += sService.deleteMenu(mem.getM_no(), menuCh.get(i));
 
 		if(result>0) {
 			rd.addFlashAttribute("msg", "정상적으로 삭제되었습니다.");	
 		}else {
-		rd.addFlashAttribute("msg","삭제 실패");
+			rd.addFlashAttribute("msg","삭제 실패");
 		}
 		return "redirect:bMenuList.do";
 	}
