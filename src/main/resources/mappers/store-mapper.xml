@@ -3,9 +3,10 @@
 <mapper namespace="storeMapper">
 	<resultMap id="MenuResultSet" type="Menu">
 		<id property="menu_no" column="menu_no" />
-		<result property="m_id" column="m_id" />
-		<result property="name" column="name" />
+		<result property="name" column="f_name" />
 		<result property="price" column="price" />
+		<result property="StoreName" column="s_name" />
+		<result property="m_no" column="m_no" />
 		<result property="original_file" column="original_file" />
 		<result property="rename_file" column="rename_file" />
 		<result property="amount" column="amount" />
@@ -14,26 +15,22 @@
 
 	</resultMap>
 	<insert id="insertMenu">
-		insert into Menu values('m'||menu_seq.nextval,#{m_id},#{name},#{price},#{original_file},
+		insert into Menu values('m'||menu_seq.nextval,#{m_no},#{name},#{price},#{original_file},
 		#{rename_file},#{amount},DEFAULT,#{elsePoint})
 	</insert>
 
 	<select id="selectStoreMenuList" resultMap="MenuResultSet">
 		select * from menu
-		where s_name=#{store} and menu_status='Y'
+		where m_no=#{store} and menu_status='Y'
 	</select>
 	<select id="selectMenuList" resultMap="MenuResultSet">
 		select * from menu
-		where m_id=#{id} and menu_status='Y'
+		where m_no=#{m_no} and menu_status='Y'
 	</select>
 	
 	<update id="deleteMenu">
 		update menu set menu_status='N'
-		where menu_no= #{menuNo}  and m_id= #{id}
+		where menu_no= #{menuNo}  and m_no= #{m_no}
 	</update>
 	
-	<select id="qnaPwdCheck">
-		select b_no
-		where b_no=#{no} and password=#{pwd}
-	</select>
 </mapper>

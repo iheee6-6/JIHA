@@ -5,7 +5,7 @@
 		<id property="no" column="b_no" />
 		<result property="writer" column="bwriter" />
 		<result property="enroll_date" column="enroll_date" />
-		<result property="status" column="status" />
+		<result property="status" column="b_status" />
 		<result property="password" column="password" />
 		<result property="count" column="count" />
 		<result property="modify_date" column="modify_date" />
@@ -19,13 +19,14 @@
 		<result property="rWriter" column="rwriter" />
 		<result property="rEnrollDate" column="enroll_date" />
 		<result property="refBno" column="b_no" />
+		<result property="refRno" column="ref_rno" />
 		<result property="rStatus" column="status" />
-		<result property="password" column="password" />
+		<result property="secret" column="secret" />
 	</resultMap>
 
 	<select id="selectList" resultMap="BoardResultSet">
 		select * from board
-		where status='Y'
+		where b_status='Y'
 		order by enroll_date desc
 	</select>
 	
@@ -38,7 +39,7 @@
 	<select id="getListCount" resultType="_int">
 		select count(*)
 		from board
-		where status='Y'
+		where b_status='Y'
 	</select>
 	
 	<insert id="insertBoard">
@@ -56,12 +57,12 @@
 		select *
 		from board
 		where b_no=#{no}
-		and status= 'Y'
+		and b_status= 'Y'
 	</select>
 	
 	<update id="deleteQna">
 		update board 
-		set status='N'
+		set b_status='N'
 		where b_no=#{no}
 	</update>
 	
@@ -69,12 +70,18 @@
 		select * 
 		from reply
 		where b_no=#{no}
-		and status='Y'
+		and status='Y' and ref_rno is null
+	</select>
+	
+	<select id="selectRReplyList" resultMap="ReplyResultSet">
+		select * 
+		from reply
+		where status='Y' and ref_rno = #{refNo}
 	</select>
 	
 	<insert id="insertReply">
 		insert into reply
-		values(reply_seq.nextval,#{rContent},#{rWriter},sysdate,'Y',#{refBno},null,default)
+		values(reply_seq.nextval,#{rContent},#{rWriter},sysdate,'Y',#{refBno},null,#{secret})
 	</insert>
 	
 	<update id="deleteReply">
@@ -92,7 +99,7 @@
 	
 	<insert id="insertRReply">
 		insert into reply
-		values(reply_seq.nextval,#{rContent},#{rWriter},sysdate,'Y',null,#{refRno},default)
+		values(reply_seq.nextval,#{rContent},#{rWriter},sysdate,'Y',null,#{refRno},#{secret})
 	</insert>
 	
 	<update id="deleteRReply">

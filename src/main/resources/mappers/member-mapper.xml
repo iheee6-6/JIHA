@@ -6,18 +6,19 @@
 	<resultMap id="memberResultSet" type="Member">
 		<id property="id" column="m_id" />
 		<result property="pwd" column="password" />
-		<result property="name" column="name" />
+		<result property="name" column="m_name" />
 		<result property="email" column="EMAIL" />
-		<result property="phone" column="PHONE" />
+		<result property="phone" column="M_PHONE" />
 		<result property="address" column="ADDRESS" />
 		<result property="mStatus" column="M_STATUS" />
 		<result property="enrollDate" column="ENROLL_DATE" />
 		<result property="storeName" column="s_name" />
-		<result property="b_no" column="b_no" />
+		<result property="m_no" column="m_no" />
+		<result property="qrcode" column="qrcode" />
 	</resultMap>
 	<insert id="insertMember">
 		insert into member values(#{id},#{address},#{phone},#{pwd},
-		#{email},#{b_no},#{storeName},#{qrcode},#{name},default)
+		#{email},m_seq.nextval,#{storeName},#{qrcode},#{name},default)
 	</insert>
 
 	<select id="dupId" parameterType="string" resultType="_int">

@@ -44,7 +44,13 @@ public class MemberServiceImpl implements MemberService {
 		if(mDao.selectMember(vo)!=null) {
 			return 1;
 		}
-		return mDao.insertMember(vo);
+		return 0;
 	}
+	
+	@Override
+	public int kakaoAddLogin(Member vo) {
+		return mDao.insertMember(vo);
 
+	}
+	
 }

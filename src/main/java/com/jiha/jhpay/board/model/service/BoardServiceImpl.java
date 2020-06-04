@@ -49,7 +49,12 @@ public class BoardServiceImpl implements BoardService {
 	public ArrayList<Reply> selectReplyList(int no) {
 		return bDao.selectReplyList(no);
 	}
-
+	
+	@Override
+	public ArrayList<Reply> selectRReplyList(int refNo) {
+		return bDao.selectRReplyList(refNo);
+	}
+	
 	@Override
 	public int insertReply(Reply r) {
 		return bDao.insertReply(r);
@@ -59,6 +64,8 @@ public class BoardServiceImpl implements BoardService {
 	public int deleteReply(int rId) {
 		return bDao.deleteReply(rId);
 	}
+
+	
 
 	
 

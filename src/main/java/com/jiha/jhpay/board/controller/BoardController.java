@@ -45,6 +45,7 @@ public class BoardController {
 
 	}
 
+	@ResponseBody
 	@RequestMapping(value = "qnaPwdCheck.do", produces = "application/text; charset=utf8")
 	public String qnaView(HttpServletResponse response, String pwd, int no) {
 		System.out.println(pwd);System.out.println(no);
@@ -113,6 +114,13 @@ public class BoardController {
 		// 시분초 다루고 싶다면 java.util.Date 사용
 		return gson.toJson(rList);
 	}
+	@RequestMapping(value="rreply.do", produces="application/json; charset=utf-8")
+	@ResponseBody
+	public String rreply(int refNo) {
+		ArrayList<Reply> rrList = bService.selectRReplyList(refNo);
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		return gson.toJson(rrList);
+	}
 	
 	@RequestMapping("addReply.do")
 	@ResponseBody
@@ -132,6 +140,7 @@ public class BoardController {
 		}
 		
 	}
+	
 	
 	@RequestMapping("rdelete.do")
 	@ResponseBody

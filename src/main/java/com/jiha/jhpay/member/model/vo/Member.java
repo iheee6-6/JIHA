@@ -21,10 +21,10 @@ import lombok.ToString;
 public class Member {
 	private String name;
 	private String id;
+	private String m_no;
 	private String address;
 	private String phone;
 	private String email;
-	private String b_no;
 	private String storeName;
 	private String pwd;
 	private String mStatus;

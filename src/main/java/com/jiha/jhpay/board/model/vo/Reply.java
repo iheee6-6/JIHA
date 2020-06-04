@@ -19,8 +19,10 @@ public class Reply {
 	private int rNo;
 	private String rContent;
 	private int refBno;
+	private int refRno;
 	private String rWriter;
 	private Date rEnrollDate;
 	private String rStatus;
+	private String secret;
 
 }

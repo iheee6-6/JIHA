@@ -13,5 +13,8 @@ public interface MemberService {
 
 	int kakaoLogin(Member vo);
 
+	int kakaoAddLogin(Member mem);
+
+
 
 }

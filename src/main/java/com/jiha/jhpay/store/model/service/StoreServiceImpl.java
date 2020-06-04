@@ -19,23 +19,18 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public ArrayList<Menu> selectMenuList(String id) {
-		return sDao.selectMenuList(id);
+	public ArrayList<Menu> selectMenuList(String m_no) {
+		return sDao.selectMenuList(m_no);
 	}
 
 	@Override
-	public int deleteMenu(String id, String menuNo) {
-		return sDao.deleteMenu(id,menuNo);
+	public int deleteMenu(String m_no, String menuNo) {
+		return sDao.deleteMenu(m_no,menuNo);
 	}
 
 	@Override
-	public int qnaPwdCheck(String pwd, int no) {
-		return sDao.qnaPwdCheck(pwd,no);
-	}
-
-	@Override
-	public ArrayList<Menu> selectStoreMenuList(String store) {
-		return sDao.selectStoreMenuList(store);
+	public ArrayList<Menu> selectStoreMenuList(String m_no) {
+		return sDao.selectStoreMenuList(m_no);
 	}
 	
 
